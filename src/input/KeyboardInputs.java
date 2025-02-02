@@ -5,11 +5,13 @@ import java.awt.event.KeyListener;
 
 import main.GamePanel;
 
+import object.*;
+
 public class KeyboardInputs implements KeyListener {
-	private GamePanel gamePanel;
+	private Player player;
 	
-	public KeyboardInputs(GamePanel gamePanel) {
-		this.gamePanel = gamePanel;
+	public KeyboardInputs(Player player) {
+		this.player = player;
 	}
 
 	@Override
@@ -21,25 +23,36 @@ public class KeyboardInputs implements KeyListener {
 	@Override
 	public void keyPressed(KeyEvent e) {
 		// TODO Auto-generated method stub
-		
+		int offset = 5;
+		switch (e.getKeyCode()) {
+		case KeyEvent.VK_W:
+			player.setMoving(true);
+			player.changeY(-offset);
+			break;
+		case KeyEvent.VK_S:
+			player.setMoving(true);
+			player.changeY(offset);
+			break;
+		case KeyEvent.VK_A:
+			player.setMoving(true);
+			player.changeX(-offset);
+			break;
+		case KeyEvent.VK_D:
+			player.setMoving(true);
+			player.changeX(offset);
+			break;
+		}
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
 		// TODO Auto-generated method stub
-		float offset = 5;
 		switch (e.getKeyCode()) {
 		case KeyEvent.VK_W:
-			gamePanel.changeYDelta(-offset);
-			break;
 		case KeyEvent.VK_S:
-			gamePanel.changeYDelta(offset);
-			break;
 		case KeyEvent.VK_A:
-			gamePanel.changeXDelta(-offset);
-			break;
 		case KeyEvent.VK_D:
-			gamePanel.changeXDelta(offset);
+			player.setMoving(false);
 			break;
 		}
 	}
