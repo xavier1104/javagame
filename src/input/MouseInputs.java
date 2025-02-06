@@ -5,12 +5,13 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
 import main.GamePanel;
+import object.*;
 
 public class MouseInputs implements MouseListener, MouseMotionListener {
-	private GamePanel gamePanel;
+	private Player player;
 	
-	public MouseInputs(GamePanel gamePanel) {
-		this.gamePanel = gamePanel;
+	public MouseInputs(World world) {
+		this.player = world.getPlayer();
 	}
 	
 	@Override
@@ -27,6 +28,7 @@ public class MouseInputs implements MouseListener, MouseMotionListener {
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		// TODO Auto-generated method stub
+		player.getStateMachine().getState().mouseClicked(e);
 	}
 
 	@Override

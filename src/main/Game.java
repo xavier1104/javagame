@@ -2,15 +2,19 @@ package main;
 
 import java.nio.file.FileSystemNotFoundException;
 
+import object.World;
+
 import static config.Global.*;
 
 public class Game implements Runnable {
 	private GameWindow gameWindow;
 	private GamePanel gamePanel;
 	private Thread gameThread;
+	private World world;
 	
 	public Game() {
-		gamePanel = new GamePanel();
+		world = new World();
+		gamePanel = new GamePanel(world);
 		gameWindow = new GameWindow(gamePanel);
 		gamePanel.requestFocusInWindow();
 		startGameLoop();
@@ -24,26 +28,42 @@ public class Game implements Runnable {
 	@Override
 	public void run() {
 		double timePerFrame = 1000000000.0 / FPS;
-		long lastFrame = System.nanoTime();
+		double timePerUpdate = 1000000000.0 / UPS;
 		
-		long now = System.nanoTime();
+		long previousTime = System.nanoTime();
+		
 		int frames = 0;
+		int updates = 0;
 		
 		long lastCheck = System.currentTimeMillis();
 		
+		double deltaU = 0;
+		double deltaF = 0;
+		
 		while(true) {
-			now = System.nanoTime();
-			if (now - lastFrame >= timePerFrame) {
-				gamePanel.update();
+			long currentTime = System.nanoTime();
+			
+			deltaU += (currentTime - previousTime) / timePerUpdate;
+			deltaF += (currentTime - previousTime) / timePerFrame;
+			previousTime = currentTime;
+			
+			if (deltaU >= 1) {
+				world.update();
+				updates++;
+				deltaU--;
+			}
+			
+			if (deltaF >= 1) {
 				gamePanel.repaint();
-				lastFrame = now;
 				frames++;
+				deltaF--;
 			}
 			
 			if (System.currentTimeMillis() - lastCheck >= 1000) {
 				lastCheck = System.currentTimeMillis();
-				System.out.println("FPS:" + frames);
+				System.out.println("FPS:" + frames + " | UPS: " + updates);
 				frames = 0;
+				updates = 0;
 			}
 		}
 		

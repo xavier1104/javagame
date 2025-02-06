@@ -18,23 +18,21 @@ import object.*;
 
 public class GamePanel extends JPanel {
 	private MouseInputs mouseInputs;
-	private Player player;
+	private KeyboardInputs keyboardInputs;
+	private World world;
 	
 	
 	private ArrayList<MyRect> rects = new ArrayList<MyRect>();
 	
-	public GamePanel() {
-		mouseInputs = new MouseInputs(this);
-		player = new Player();
+	public GamePanel(World world) {
+		this.world = world;
+		mouseInputs = new MouseInputs(world);
+		keyboardInputs = new KeyboardInputs(world);
 		
 		setPanelSize();
-		addKeyListener(new KeyboardInputs(player));
+		addKeyListener(keyboardInputs);
 		addMouseListener(mouseInputs);
 		addMouseMotionListener(mouseInputs);
-	}
-	
-	public void setPosition(int x, int y) {
-		player.setPos(x, y);
 	}
 	
 	private void setPanelSize() {
@@ -42,19 +40,6 @@ public class GamePanel extends JPanel {
 		setMinimumSize(size);
 		setPreferredSize(size);
 		setMaximumSize(size);
-		
-	}
-	
-	public void changeYDelta(int value) {
-		player.setMoving(true);
-		player.changeY(value);
-		//repaint();
-	}
-	
-	public void changeXDelta(int value) {
-		player.setMoving(true);
-		player.changeX(value);
-		//repaint();
 	}
 	
 	public void spawnRect(int x, int y) {
@@ -63,16 +48,12 @@ public class GamePanel extends JPanel {
 	
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		player.draw(g);
+		world.render(g);
 		
 		
 		for (MyRect rect : rects) {
 			rect.updateRect();
 			rect.draw(g);
 		}
-	}
-	
-	public void update() {
-		player.update();
 	}
 }

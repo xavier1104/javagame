@@ -3,16 +3,19 @@ package object;
 import java.awt.Graphics;
 
 import object.Animator.ANI_CLIP;
+import states.StateMachine;
 
-public class Player {
+public class Player extends Entity {
 	Animator animator;
-	int x = 0;
-	int y = 0;
+	StateMachine stateMachine;
 	boolean isMoving = false;
 	
-	public Player() {
+	public Player(int x, int y) {
+		super(x, y);
 		animator = new Animator("/player_sprites.png");
-		animator.setClip(ANI_CLIP.IDLE);
+		
+		stateMachine = new StateMachine(this);
+		
 	}
 	
 	public void setPos(int x, int y) {
@@ -20,11 +23,14 @@ public class Player {
 		this.y = y;
 	}
 	
+	@Override
 	public void update() {
+		stateMachine.update();
 		animator.update();
 	}
 	
-	public void draw(Graphics g) {
+	@Override
+	public void render(Graphics g) {
 		animator.draw(g, x, y);
 	}
 	
@@ -36,14 +42,11 @@ public class Player {
 		x += value;
 	}
 	
-	public void setMoving(boolean isMoving) {
-		this.isMoving = isMoving;
-		
-		if (this.isMoving) {
-			animator.setClip(ANI_CLIP.RUNNING);
-		}
-		else {
-			animator.setClip(ANI_CLIP.IDLE);
-		}
+	public StateMachine getStateMachine() {
+		return stateMachine;
+	}
+	
+	public Animator getAnimator() {
+		return animator;
 	}
 }
