@@ -7,6 +7,8 @@ import java.lang.constant.Constable;
 import java.lang.foreign.ValueLayout.OfBoolean;
 import java.util.ArrayList;
 
+import config.Global;
+
 import static config.Global.*;
 import object.Animator.ANI_CLIP;
 
@@ -56,7 +58,7 @@ public class Animation {
 	}
 	
 	public void draw(Graphics g, int x, int y) {
-		g.drawImage(anim.get(currentIdx), x, y, width * 2, heigh * 2, null);
+		g.drawImage(anim.get(currentIdx), x, y, (int)(width * Global.SCALE), (int)(heigh * Global.SCALE), null);
 	}
 	
 	public int getCurrentIdx() {

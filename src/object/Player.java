@@ -2,44 +2,47 @@ package object;
 
 import java.awt.Graphics;
 
+import config.Global;
 import object.Animator.ANI_CLIP;
 import states.StateMachine;
 
 public class Player extends Entity {
 	Animator animator;
 	StateMachine stateMachine;
-	boolean isMoving = false;
+	float moveSpeed = 2;
+	float xDrawOffset = 21 * Global.SCALE;
+	float yDrawOffset = 4 * Global.SCALE;
 	
-	public Player(int x, int y) {
-		super(x, y);
-		animator = new Animator("/player_sprites.png");
-		
+	public Player(float x, float y) {
+		super(x, y, (20 * Global.SCALE), (28 * Global.SCALE));
+		animator = new Animator(Global.PLAYER_ATLAS);
 		stateMachine = new StateMachine(this);
-		
 	}
 	
-	public void setPos(int x, int y) {
-		this.x = x;
-		this.y = y;
+	public void setPos(float x, float y) {
+		setX(x);
+		setY(y);
 	}
 	
 	@Override
 	public void update() {
+		super.update();
 		stateMachine.update();
 		animator.update();
 	}
 	
 	@Override
 	public void render(Graphics g) {
-		animator.draw(g, x, y);
+		super.render(g);
+		animator.draw(g, (int)(getX() - xDrawOffset), (int)(getY() - yDrawOffset));
 	}
 	
 	public void changeY(int value) {
-		y += value;
+		setY((int)(getY() + value));
 	}
 	
 	public void changeX(int value) {
-		x += value;
+		setX((int)(getX() + value));
 	}
 	
 	public StateMachine getStateMachine() {
@@ -48,5 +51,9 @@ public class Player extends Entity {
 	
 	public Animator getAnimator() {
 		return animator;
+	}
+	
+	public float getMoveSpeed() {
+		return moveSpeed;
 	}
 }

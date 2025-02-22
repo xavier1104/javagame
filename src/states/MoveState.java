@@ -2,8 +2,9 @@ package states;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
-
+import levels.*;
 import object.Player;
+import utils.HelpMethods;
 import object.Animator.ANI_CLIP;
 
 public class MoveState implements State {
@@ -69,21 +70,29 @@ public class MoveState implements State {
 	
 	@Override
 	public void update() {
-		int offset = 1;
+		float xOffset = 0;
+		float yOffset = 0;
 		if (up) {
-			player.changeY(-offset);
+			yOffset = -1 * player.getMoveSpeed();
 		}
 		
 		if (down) {
-			player.changeY(offset);
+			yOffset = 1 * player.getMoveSpeed();
 		}
 		
 		if (left) {
-			player.changeX(-offset);
+			xOffset = -1 * player.getMoveSpeed();
 		}
 		
 		if (right) {
-			player.changeX(offset);
+			xOffset = 1 * player.getMoveSpeed();
+		}
+		
+		Level level = LevelManager.getInstance().getLevel();
+		float xPos = player.getX() + xOffset;
+		float yPos = player.getY() + yOffset;
+		if (HelpMethods.CanMoveHere(xPos, yPos, player.getWidth(), player.getHeight(), level.getData())) {
+			player.setPos(xPos, yPos);
 		}
 	}
 

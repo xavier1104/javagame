@@ -3,15 +3,17 @@ package object;
 import java.awt.Graphics;
 import java.util.ArrayList;
 
+import levels.LevelManager;
+
 public class World {
 	private ArrayList<Entity> entities;
 	private Player player;
+	private LevelManager levelManager;
 	
 	public World() {
 		// TODO Auto-generated constructor stub
 		entities = new ArrayList<Entity>();
-		
-		player = new Player(0, 0);
+		player = new Player(200, 200);
 		entities.add(player);
 	}
 	
@@ -22,6 +24,7 @@ public class World {
 	}
 	
 	public void render(Graphics g) {
+		LevelManager.getInstance().draw(g);
 		for (Entity entity : entities) {
 			entity.render(g);
 		}

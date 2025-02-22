@@ -9,6 +9,8 @@ import java.util.HashMap;
 
 import javax.imageio.ImageIO;
 
+import utils.LoadSave;
+
 
 
 public class Animator {
@@ -30,22 +32,7 @@ public class Animator {
 	ANI_CLIP currentAni;
 	
 	public Animator(String fileName) {
-		InputStream is = getClass().getResourceAsStream(fileName);
-		
-		try {
-			img = ImageIO.read(is);
-		}catch (IOException e) {
-			// TODO: handle exception
-			e.printStackTrace();
-		}
-		finally {
-			try {
-				is.close();
-			}catch (IOException e){
-				e.printStackTrace();
-			}
-		}
-		
+		img = LoadSave.getSpriteAtlas(fileName);
 		anims = new HashMap<Animator.ANI_CLIP, Animation>();
 		BufferedImage subImg = img.getSubimage(0, 0, 64 * 5, 40);
 		anims.put(ANI_CLIP.IDLE, new Animation(ANI_CLIP.IDLE, 5, subImg, 8, 64, 40, true));
