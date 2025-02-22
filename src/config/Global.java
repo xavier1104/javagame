@@ -12,6 +12,8 @@ public class Global {
 	public final static int GAME_WIDTH = TILES_SIZE * TILES_IN_WIDTH;
 	public final static int GAME_HEIGHT = TILES_SIZE * TILES_IN_HEIGHT;
 	
+	public final static float GRAVIRY = 0.04f * SCALE;
+	
 	public final static String PLAYER_ATLAS = "player_sprites.png";
 	public final static String OUTSIDE_ATLAS = "outside_sprites.png";
 	public final static String LEVEL_ONE_DATA = "level_one_data.png";

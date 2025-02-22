@@ -8,8 +8,6 @@ import utils.HelpMethods;
 import object.Animator.ANI_CLIP;
 
 public class MoveState implements State {
-	private boolean up = false;
-	private boolean down = false;
 	private boolean left = false;
 	private boolean right = false;
 	
@@ -30,11 +28,8 @@ public class MoveState implements State {
 	public void keyPressed(KeyEvent e) {
 		// TODO Auto-generated method stub
 		switch (e.getKeyCode()) {
-		case KeyEvent.VK_W:
-			up = true;
-			break;
-		case KeyEvent.VK_S:
-			down = true;
+		case KeyEvent.VK_SPACE:
+			player.getStateMachine().setState(new JumpState(player, getXDir()));
 			break;
 		case KeyEvent.VK_A:
 			left = true;
@@ -45,16 +40,22 @@ public class MoveState implements State {
 		}
 	}
 
+	private float getXDir() {
+		float xDir = 0;
+		if(left) {
+			xDir = -1;
+		}
+		
+		if (right) {
+			xDir = 1;
+		}
+		
+		return xDir;
+	}
 	@Override
 	public void keyReleased(KeyEvent e) {
 		// TODO Auto-generated method stub
 		switch (e.getKeyCode()) {
-		case KeyEvent.VK_W:
-			up = false;
-			break;
-		case KeyEvent.VK_S:
-			down = false;
-			break;
 		case KeyEvent.VK_A:
 			left = false;
 			break;
@@ -63,22 +64,23 @@ public class MoveState implements State {
 			break;
 		}
 		
-		if (!up && !down && !left && !right) {
+		if (!left && !right) {
 			player.getStateMachine().setState(new IdleState(player));
 		}
 	}
 	
 	@Override
 	public void update() {
-		float xOffset = 0;
-		float yOffset = 0;
-		if (up) {
-			yOffset = -1 * player.getMoveSpeed();
-		}
+		updateXPos();
 		
-		if (down) {
-			yOffset = 1 * player.getMoveSpeed();
+		Level level = LevelManager.getInstance().getLevel();
+		if(!HelpMethods.IsEntityOnFloor(player, level.getData())) {
+			player.getStateMachine().setState(new FallState(player, getXDir()));
 		}
+	}
+	
+	private void updateXPos() {
+		float xOffset = 0;
 		
 		if (left) {
 			xOffset = -1 * player.getMoveSpeed();
@@ -90,12 +92,12 @@ public class MoveState implements State {
 		
 		Level level = LevelManager.getInstance().getLevel();
 		float xPos = player.getX() + xOffset;
-		float yPos = player.getY() + yOffset;
+		float yPos = player.getY();
 		if (HelpMethods.CanMoveHere(xPos, yPos, player.getWidth(), player.getHeight(), level.getData())) {
 			player.setPos(xPos, yPos);
 		}
 	}
-
+	
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		// TODO Auto-generated method stub

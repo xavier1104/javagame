@@ -3,7 +3,9 @@ package states;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 
+import levels.*;
 import object.Player;
+import utils.HelpMethods;
 import object.Animator.ANI_CLIP;
 
 public class IdleState implements State {
@@ -18,8 +20,9 @@ public class IdleState implements State {
 	public void keyPressed(KeyEvent e) {
 		// TODO Auto-generated method stub
 		switch (e.getKeyCode()) {
-		case KeyEvent.VK_W :
-		case KeyEvent.VK_S : 
+		case KeyEvent.VK_SPACE :
+			player.getStateMachine().setState(new JumpState(player, 0));
+			break;
 		case KeyEvent.VK_A : 
 		case KeyEvent.VK_D :
 			player.getStateMachine().setState(new MoveState(player, e));
@@ -36,7 +39,10 @@ public class IdleState implements State {
 	@Override
 	public void update() {
 		// TODO Auto-generated method stub
-		
+		Level level = LevelManager .getInstance().getLevel(); 
+		if(!HelpMethods.IsEntityOnFloor(player, level.getData())) {
+			player.getStateMachine().setState(new FallState(player, 0));
+		}
 	}
 
 	@Override

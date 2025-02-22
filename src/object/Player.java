@@ -9,7 +9,9 @@ import states.StateMachine;
 public class Player extends Entity {
 	Animator animator;
 	StateMachine stateMachine;
-	float moveSpeed = 2;
+	float moveSpeed = 2.0f;
+	float airSpeed = 0;
+	float jumpSpeed = -2.25f * Global.SCALE;
 	float xDrawOffset = 21 * Global.SCALE;
 	float yDrawOffset = 4 * Global.SCALE;
 	
@@ -55,5 +57,17 @@ public class Player extends Entity {
 	
 	public float getMoveSpeed() {
 		return moveSpeed;
+	}
+	
+	public void setAirSpeed(float speed) {
+		airSpeed = speed;
+	}
+	
+	public float getAirSpeed() {
+		return airSpeed;
+	}
+	
+	public float getJumpSpeed() {
+		return jumpSpeed;
 	}
 }
